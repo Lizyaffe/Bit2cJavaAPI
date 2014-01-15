@@ -1,6 +1,6 @@
 package objects;
 
-public enum coinType {
+public enum CoinType {
 	BTC,
     LTC,
     NIS
