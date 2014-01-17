@@ -1,6 +1,6 @@
 package objects;
 
-import java.util.Calendar;
+import java.util.Date;
 
 public class AccountRaw {
 	private double BalanceBTC;
@@ -9,11 +9,11 @@ public class AccountRaw {
 	private Double BTC;
 	private Double LTC;
 	private Double NIS;
-	private Calendar Created;
+	private Date Created;
 	private Double Fee;
 	private Double FeeInNIS;
 	private double id;
-	private Calendar OrderCreated;
+	private Date OrderCreated;
 	private Double PricePerCoin;
 	private String Ref;
 	private int TypeId;
@@ -60,10 +60,10 @@ public class AccountRaw {
 		NIS = nIS;
 	}
 	
-	public Calendar getCreated() {
+	public Date getCreated() {
 		return Created;
 	}
-	public void setCreated(Calendar created) {
+	public void setCreated(Date created) {
 		Created = created;
 	}
 	
@@ -88,10 +88,10 @@ public class AccountRaw {
 		this.id = id;
 	}
 	
-	public Calendar getOrderCreated() {
+	public Date getOrderCreated() {
 		return OrderCreated;
 	}
-	public void setOrderCreated(Calendar orderCreated) {
+	public void setOrderCreated(Date orderCreated) {
 		OrderCreated = orderCreated;
 	}
 	

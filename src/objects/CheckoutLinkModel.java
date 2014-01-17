@@ -1,52 +1,61 @@
 package objects;
 
 public class CheckoutLinkModel {
-	private double Price;
-    private String Description;
-    private CoinType CoinType;
-    private String ReturnURL;
-    private String CancelURL;
-    private boolean NotifyByEmail;
+	private double price;
+    private String description;
+    private CoinType coinType;
+    private String returnURL;
+    private String cancelURL;
+    private boolean notifyByEmail;
+    
+    public CheckoutLinkModel(double price, String description, CoinType coinType, String returnURL, String cancelURL, boolean notifyByEmail) {
+    	this.price = price;
+    	this.description = description;
+    	this.coinType = coinType;
+    	this.returnURL = returnURL;
+    	this.cancelURL = cancelURL;
+    	this.notifyByEmail = notifyByEmail;
+    }
     
 	public double getPrice() {
-		return Price;
+		return this.price;
 	}
 	public void setPrice(double price) {
-		Price = price;
+		this.price = price;
 	}
 	
 	public String getDescription() {
-		return Description;
+		return this.description;
 	}
 	public void setDescription(String description) {
-		Description = description;
+		this.description = description;
 	}
 	
 	public CoinType getCoinType() {
-		return CoinType;
+		return this.coinType;
 	}
 	public void setCoinType(CoinType coinType) {
-		CoinType = coinType;
+		this.coinType = coinType;
 	}
 	
 	public String getReturnURL() {
-		return ReturnURL;
+		return this.returnURL;
 	}
 	public void setReturnURL(String returnURL) {
-		ReturnURL = returnURL;
+		this.returnURL = returnURL;
 	}
 	
 	public String getCancelURL() {
-		return CancelURL;
+		return this.cancelURL;
 	}
 	public void setCancelURL(String cancelURL) {
-		CancelURL = cancelURL;
+		this.cancelURL = cancelURL;
 	}
 	
 	public boolean isNotifyByEmail() {
-		return NotifyByEmail;
+		return this.notifyByEmail;
 	}
 	public void setNotifyByEmail(boolean notifyByEmail) {
-		NotifyByEmail = notifyByEmail;
+		this.notifyByEmail = notifyByEmail;
 	}
 }

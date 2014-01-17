@@ -1,10 +1,10 @@
 package objects;
 
-import java.util.Calendar;
+import java.util.Date;
 
 public class TradeOrder {
 	private double a;
-    private Calendar d;
+    private Date d;
     private double id;
     private double p;
     private PairType pair;
@@ -18,10 +18,10 @@ public class TradeOrder {
 		this.a = a;
 	}
 	
-	public Calendar getD() {
+	public Date getD() {
 		return d;
 	}
-	public void setD(Calendar d) {
+	public void setD(Date d) {
 		this.d = d;
 	}
 	

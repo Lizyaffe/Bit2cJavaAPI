@@ -1,44 +1,52 @@
 package objects;
 
 public class OrderData {
-	private double Amount;
-    private double Price;
-    private double Total;
-    private boolean IsBid;
-    private PairType Pair;
+	private double amount;
+    private double price;
+    private double total;
+    private boolean isBid;
+    private PairType pair;
     
+	public OrderData(double amount, boolean isBid, PairType pair, double price, double total) {
+		this.amount = amount;
+		this.price = price;
+		this.total = total;
+		this.isBid = isBid;
+		this.pair = pair;
+	}
+	
 	public double getAmount() {
-		return Amount;
+		return this.amount;
 	}
 	public void setAmount(double amount) {
-		Amount = amount;
+		this.amount = amount;
 	}
 	
 	public double getPrice() {
-		return Price;
+		return this.price;
 	}
 	public void setPrice(double price) {
-		Price = price;
+		this.price = price;
 	}
 	
 	public double getTotal() {
-		return Total;
+		return this.total;
 	}
 	public void setTotal(double total) {
-		Total = total;
+		this.total = total;
 	}
 	
 	public boolean isIsBid() {
-		return IsBid;
+		return this.isBid;
 	}
 	public void setIsBid(boolean isBid) {
-		IsBid = isBid;
+		this.isBid = isBid;
 	}
 	
 	public PairType getPair() {
-		return Pair;
+		return this.pair;
 	}
 	public void setPair(PairType pair) {
-		Pair = pair;
+		this.pair = pair;
 	}
 }

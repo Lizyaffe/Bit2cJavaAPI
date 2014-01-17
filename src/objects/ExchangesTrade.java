@@ -6,6 +6,13 @@ public class ExchangesTrade {
 	private double amount;
 	private double tid;
 	
+	public ExchangesTrade(double date, double price, double amout, double tid) {
+		this.date = date;
+		this.price = price;
+		this.amount = amout;
+		this.tid = tid;
+	}
+	
 	public double getDate() {
 		return date;
 	}

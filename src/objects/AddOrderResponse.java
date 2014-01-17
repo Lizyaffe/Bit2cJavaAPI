@@ -2,7 +2,6 @@ package objects;
 
 public class AddOrderResponse {
 	private OrderResponse OrderResponse;
-	
 	private od NewOrder;
 	
 	public OrderResponse getOrderResponse() {

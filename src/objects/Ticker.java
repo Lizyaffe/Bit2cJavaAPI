@@ -7,6 +7,14 @@ public class Ticker {
 	private double a;
 	private double av;
 	
+	public Ticker(double h, double l, double ll, double a, double av) {
+		this.h = h;
+		this.l = l;
+		this.ll = ll;
+		this.a = a;
+		this.av = av;
+	}
+	
 	public double getH() {
 		return h;
 	}
