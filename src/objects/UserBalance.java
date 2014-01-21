@@ -5,6 +5,12 @@ public class UserBalance {
 	private double BalanceLTC;
 	private double BalanceNIS;
 	
+	public UserBalance(double BalanceBTC, double BalanceLTC, double BalanceNIS) {
+		this.BalanceBTC = BalanceBTC;
+		this.BalanceLTC = BalanceLTC;
+		this.BalanceNIS = BalanceNIS;
+	}
+	
 	public double getBalanceBTC() {
 		return BalanceBTC;
 	}

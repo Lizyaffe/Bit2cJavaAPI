@@ -6,10 +6,10 @@ import java.io.InputStreamReader;
 import java.net.*;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
+import javax.crypto.Mac;
+import javax.crypto.spec.SecretKeySpec;
 
 import com.google.gson.Gson;
 import com.google.gson.internal.LinkedTreeMap;
@@ -26,63 +26,21 @@ import objects.PairType;
 import objects.Ticker;
 import objects.UserBalance;
 
+import sun.misc.BASE64Decoder;
+import sun.misc.BASE64Encoder;
+
 public class Bit2cClient {
 	private String Key;
     private String secret;
-    private int _nonce;
-    private String nonce; // TODO - create get function
-    private String URL; // TODO - create get and set function
+    private long nonce = 0;
+    private String URL;
     private HttpURLConnection client; // TODO - create get and set function
-
-    private String GetQueryString(Object obj)
-    {
-//        var properties = from p in obj.GetType().GetProperties()
-//                         where p.GetValue(obj, null) != null
-//                         select p.Name + "=" + p.GetValue(obj, null).ToString();
-//
-//        return String.Join("&", properties.ToArray());
-    	return null;
-    }
-
-//    private T Deserialize<T>(string json)
-//    {
-//        T obj = Activator.CreateInstance<T>();
-//        MemoryStream ms = new MemoryStream(Encoding.Unicode.GetBytes(json));
-//        DataContractJsonSerializer serializer = new DataContractJsonSerializer(obj.GetType());
-//        obj = (T)serializer.ReadObject(ms);
-//        ms.Close();
-//        return obj;
-//    }
-
-    private static String ComputeHash(String secret, String message)
-    {
-//        var key = Encoding.ASCII.GetBytes(secret.ToUpper());
-//        string hashString;
-//
-//        using (var hmac = new HMACSHA512(key))
-//        {
-//            var hash = hmac.ComputeHash(Encoding.ASCII.GetBytes(message));
-//            hashString = Convert.ToBase64String(hash);
-//        }
-//
-//        return hashString;
-    	return null;
-    }
 
     public Bit2cClient(String url, String key, String secret)
     {
-    	try {
-			this.URL = url;
-			this.Key = key; 
-			this.secret = secret;
-			this.client = (HttpURLConnection)(new URL(this.URL)).openConnection();
-			this.client.addRequestProperty("key", key);
-			_nonce = (int)System.currentTimeMillis() / 1000;
-		} catch (MalformedURLException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+    	this.URL = url;
+		this.Key = key; 
+		this.secret = secret;
     }
 
     public ArrayList<ExchangesTrade> GetTrades(PairType Pair, Long since, Double date)
@@ -141,10 +99,10 @@ public class Bit2cClient {
 
     public OrderBook GetOrderBook(PairType Pair)
     {
-    	ArrayList<OrderBook> result = new ArrayList<OrderBook>();
+    	OrderBook result = new OrderBook();
     	
     	try {
-    		this.client = (HttpURLConnection)(new URL(this.URL + "Exchanges/" + Pair.toString() + "/trades.json")).openConnection();
+    		this.client = (HttpURLConnection)(new URL(this.URL + "Exchanges/" + Pair.toString() + "/orderbook.json")).openConnection();
 			this.client.getContent();
 			BufferedReader streamReader = new BufferedReader(new InputStreamReader(this.client.getInputStream(), "UTF-8")); 
 		    StringBuilder responseStrBuilder = new StringBuilder();
@@ -154,10 +112,8 @@ public class Bit2cClient {
 		        responseStrBuilder.append(inputStr);
 		    
 		    Gson gson = new Gson();
-//		    ArrayList<LinkedTreeMap> fromJSON = gson.fromJson(responseStrBuilder.toString(), ArrayList.class);
-//		    for (int i = 0; i < fromJSON.size(); i++) {
-//		    	result.add(new OrderBook((Double)fromJSON.get(i).get("date"), (Double)fromJSON.get(i).get("price"), (Double)fromJSON.get(i).get("amount"), (Double)fromJSON.get(i).get("tid")));
-//			}
+		    LinkedTreeMap<String, ArrayList<ArrayList<Double>>> data = gson.fromJson(responseStrBuilder.toString(), LinkedTreeMap.class);
+		    result = new OrderBook(data.get("asks"), data.get("bids"));
 		} catch (MalformedURLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -165,175 +121,134 @@ public class Bit2cClient {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-    	return null;
+    	return result;
     }
 
     public AddOrderResponse AddOrder(OrderData data)
     {
-//        try
-//        {
-//            data.Amount = decimal.Round(data.Amount, 4);
-//            var json = Newtonsoft.Json.JsonConvert.SerializeObject(data);
-//            string qString = GetQueryString(data) + "&nonce=" + nonce;
-//            var sign = ComputeHash(this.secret,qString);
-//            var url = URL + "Order/AddOrder"; 
-//            string result = Query(qString, url, Key, sign,"POST");
-//            AddOrderResponse response = Deserialize<AddOrderResponse>(result);
-//            return response;
-//        }
-//        catch (Exception ex)
-//        {
-//            throw;
-//        }
-    	return null;
+    	HashMap<String, String> params = new HashMap<String, String>();
+    	params.put("Amout", String.valueOf(data.amount));
+    	params.put("IsBid", String.valueOf(data.isBid));
+    	params.put("Pair", String.valueOf(data.pair));
+    	params.put("Price", String.valueOf(data.price));
+    	params.put("Total", String.valueOf(data.total));
+    	String response = Query("Order/AddOrder", params);
+    	
+    	Gson gson = new Gson();
+    	AddOrderResponse fromJSON = gson.fromJson(response, AddOrderResponse.class);
+    	return fromJSON;
     }
 
     public Orders MyOrders(PairType pair)
     {
-//        try
-//        {
-//            string qString = "nonce=" + nonce;
-//            var sign = ComputeHash(this.secret, qString);
-//            var url = URL + "Order/MyOrders";
-//            string result = Query(qString, url, Key, sign, "POST");
-//            Orders response = Deserialize<Orders>(result);
-//            return response;
-//        }
-//        catch (Exception ex)
-//        {
-//            throw;
-//        }
-    	return null;
-    }
-
-    public void ClearMyOrders(PairType pair)
-    {
-//        try
-//        {
-//            var response2 = client.DownloadString(URL + "Order/MyOrders?pair=" + pair.ToString());
-//            Orders myOrders = Deserialize<Orders>(response2);
-//            foreach (var item in myOrders.asks)
-//            {
-//                if (item.pair == pair)
-//                {
-//                    CancelOrder(item.id);
-//                }
-//            }
-//            foreach (var item in myOrders.bids)
-//            {
-//                if (item.pair == pair)
-//                {
-//                    CancelOrder(item.id);
-//                }
-//            }
-//        }
-//        catch (Exception ex)
-//        {
-//            
-//            throw;
-//        }
+    	HashMap<String, String> params = new HashMap<String, String>();
+    	params.put("pair", String.valueOf(pair));
+    	String response = Query("Order/MyOrders", params);
+    	
+    	Gson gson = new Gson();
+    	Orders fromJSON = gson.fromJson(response, Orders.class);
+    	return fromJSON;
     }
 
     public UserBalance Balance()
     {
-//        try
-//        {
-//            string qString = "nonce=" + nonce;
-//            var sign = ComputeHash(this.secret, qString);
-//            var url = URL + "Account/Balance";
-//            string result = Query(qString, url, Key, sign, "POST");
-//            UserBalance response = Deserialize<UserBalance>(result);
-//            return response;
-//        }
-//        catch (Exception ex)
-//        {
-//            
-//            throw;
-//        }
-    	return null;
+    	String data = Query("Account/Balance", new HashMap<String, String>());
+    	
+    	Gson gson = new Gson();
+		UserBalance fromJSON = gson.fromJson(data, UserBalance.class);
+		return fromJSON;
     }
 
     public ArrayList<AccountRaw> AccountHistory(Date fromTime, Date toTime)
     {
-//        try
-//        {
-//            string ft = fromTime.HasValue ? fromTime.Value.ToString("dd/MM/yyyy HH:mm:ss.fff") : null;
-//            string tt = toTime.HasValue ? toTime.Value.ToString("dd/MM/yyyy HH:mm:ss.fff") : null;
-//            string qString = string.Format("fromTime={0}&toTime={1}&nonce={2}",ft,tt,nonce);
-//            var sign = ComputeHash(this.secret, qString);
-//            var url = URL + "Order/AccountHistory"; 
-//            string result = Query(qString, url, Key, sign, "POST");
-//            List<AccountRaw> response = Deserialize<List<AccountRaw>>(result);
-//            return response;
-//        }
-//        catch (Exception ex)
-//        {
-//            
-//            throw;
-//        }
-    	return null;
+    	HashMap<String, String> params = new HashMap<String, String>();
+    	params.put("fromTime", String.valueOf(fromTime));
+    	params.put("toTime", String.valueOf(toTime));
+    	String response = Query("Order/AccountHistory", params);
+    	
+    	Gson gson = new Gson();
+    	ArrayList<AccountRaw> fromJSON = gson.fromJson(response, ArrayList.class);
+    	return fromJSON;
     }
-    public void CancelOrder(double id)
+    
+    public CheckoutResponse CancelOrder(double id)
     {
-//        try
-//        {
-//            string qString = "id=" + id.ToString() + "&nonce=" + nonce;
-//            var sign = ComputeHash(this.secret, qString);
-//            var url = URL + "Order/CancelOrder";
-//            string result = Query(qString, url, Key, sign, "POST");
-//            OrderResponse response = Deserialize<OrderResponse>(result);
-//        }
-//        catch (Exception ex)
-//        {
-//            
-//            throw;
-//        }
+    	HashMap<String, String> params = new HashMap<String, String>();
+    	params.put("id", String.valueOf(id));
+    	String response = Query("Order/CancelOrder", params);
+    	
+    	Gson gson = new Gson();
+    	CheckoutResponse fromJSON = gson.fromJson(response, CheckoutResponse.class);
+    	return fromJSON;
     }
 
     public CheckoutResponse CreateCheckout(CheckoutLinkModel data)
     {
-//        try
-//        {
-//            var json = Newtonsoft.Json.JsonConvert.SerializeObject(data);
-//            string qString = GetQueryString(data) + "&nonce=" + nonce;
-//            var sign = ComputeHash(this.secret, qString);
-//            var url = URL + "Merchant/CreateCheckout";
-//            string result = Query(qString, url, Key, sign, "POST");
-//            CheckoutResponse response = Deserialize<CheckoutResponse>(result);
-//            return response;
-//        }
-//        catch (Exception ex)
-//        {
-//            throw;
-//        }
-    	return null;
+    	HashMap<String, String> params = new HashMap<String, String>();
+    	params.put("Price", String.valueOf(data.price));
+    	params.put("Description", String.valueOf(data.description));
+    	params.put("CoinType", String.valueOf(data.coinType));
+    	params.put("ReturnURL", String.valueOf(data.returnURL));
+    	params.put("CancelURL", String.valueOf(data.cancelURL));
+    	params.put("NotifyByEmail", String.valueOf(data.notifyByEmail));
+    	String response = Query("Merchant/CreateCheckout", params);
+    	
+    	Gson gson = new Gson();
+    	CheckoutResponse fromJSON = gson.fromJson(response, CheckoutResponse.class);
+		return fromJSON;
     }
-
-    private String Query(String qString, String url, String key, String sign, String method)
-    {
-//        var data = Encoding.ASCII.GetBytes(qString);
-//
-//        var request = WebRequest.Create(new Uri(url)) as HttpWebRequest;
-//        if (request == null)
-//            throw new Exception("Non HTTP WebRequest");
-//
-//        request.Method = method;
-//        request.Timeout = 15000;
-//        request.ContentType = "application/x-www-form-urlencoded";
-//        request.ContentLength = data.Length;
-//
-//        request.Headers.Add("Key", key);
-//        request.Headers.Add("Sign", sign);
-//        var reqStream = request.GetRequestStream();
-//        reqStream.Write(data, 0, data.Length);
-//        reqStream.Close();
-//
-//        var response = request.GetResponse();
-//        var resStream = response.GetResponseStream();
-//        var resStreamReader = new StreamReader(resStream);
-//        var resString = resStreamReader.ReadToEnd();
-//
-//        return resString;
-    	return null;
+    
+    public String Query(String path, HashMap<String, String> args) {
+        try {
+        	this.nonce = this.nonce != 0 ? nonce + 100 : System.currentTimeMillis()/1000;
+            args.put("nonce", String.valueOf(nonce));
+            String post_data = this.buildQueryString(args);
+            Mac mac = Mac.getInstance("HmacSHA512");
+            mac.init(new SecretKeySpec(this.secret.toUpperCase().getBytes(), "HmacSHA512"));
+            String signature = (new BASE64Encoder()).encode(mac.doFinal(post_data.getBytes())).replaceAll("\r\n", "");
+            
+            // build URL
+            URL queryUrl = new URL(this.URL + path);
+            
+            // create connection
+            HttpURLConnection connection = (HttpURLConnection)queryUrl.openConnection();
+            connection.setRequestMethod("POST");
+            connection.setRequestProperty("Timeout", "15000");
+            connection.setRequestProperty("content-type", "application/x-www-form-urlencoded");
+            connection.setRequestProperty("content-length", String.valueOf(post_data.length()));
+            connection.setDoOutput(true);
+            connection.setRequestProperty("Key", this.Key);
+            connection.setRequestProperty("Sign", signature);
+ 
+//            System.out.println("URL: " + queryUrl);
+//            System.out.println("Data: " + post_data);
+//            System.out.println("Key: " + this.Key);
+//            System.out.println("Sign: " + signature);
+            
+            // write post
+            connection.getOutputStream().write(post_data.getBytes());
+ 
+            // read info
+            byte buffer[] = new byte[16384];
+            int len = connection.getInputStream().read(buffer, 0, 16384);
+            return new String(buffer, 0, len, "UTF-8");
+        } catch (Exception ex) {
+        	System.out.println(ex);
+        }
+        return "";
+    }
+ 
+    protected String buildQueryString(HashMap<String, String> args) {
+        String result = new String();
+        for (String hashkey : args.keySet()) {
+            if (result.length() > 0) result += '&';
+            try {
+                result += URLEncoder.encode(hashkey, "UTF-8") + "="
+                        + URLEncoder.encode(args.get(hashkey), "UTF-8");
+            } catch (Exception ex) {
+//                Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        return result;
     }
 }

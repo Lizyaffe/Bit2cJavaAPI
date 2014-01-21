@@ -4,17 +4,16 @@ public class AddOrderResponse {
 	private OrderResponse OrderResponse;
 	private od NewOrder;
 	
+	public AddOrderResponse(OrderResponse OrderResponse, od NewOrder) {
+		this.OrderResponse = OrderResponse;
+		this.NewOrder = NewOrder;
+	}
+	
 	public OrderResponse getOrderResponse() {
 		return OrderResponse;
-	}
-	public void setOrderResponse(OrderResponse orderResponse) {
-		OrderResponse = orderResponse;
 	}
 	
 	public od getNewOrder() {
 		return NewOrder;
-	}
-	public void setNewOrder(od newOrder) {
-		NewOrder = newOrder;
 	}
 }

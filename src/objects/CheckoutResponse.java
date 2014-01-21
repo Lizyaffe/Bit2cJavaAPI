@@ -6,6 +6,11 @@ public class CheckoutResponse {
 	private String error;
     private UUID id;
     
+    public CheckoutResponse(String error, UUID id) {
+		this.error = error;
+		this.id = id;
+	}
+    
 	public String getError() {
 		return error;
 	}

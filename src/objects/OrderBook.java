@@ -3,20 +3,29 @@ package objects;
 import java.util.ArrayList;
 
 public class OrderBook {
-	private ArrayList<ArrayList<Double>> ask;
-	private ArrayList<ArrayList<Double>> bid;
+	private ArrayList<ArrayList<Double>> asks;
+	private ArrayList<ArrayList<Double>> bids;
 	
-	public ArrayList<ArrayList<Double>> getAsk() {
-		return ask;
-	}
-	public void setAsk(ArrayList<ArrayList<Double>> ask) {
-		this.ask = ask;
+	public OrderBook() {
+		
 	}
 	
-	public ArrayList<ArrayList<Double>> getBid() {
-		return bid;
+	public OrderBook(ArrayList<ArrayList<Double>> asks, ArrayList<ArrayList<Double>> bids) {
+		this.asks = asks;
+		this.bids = bids;
 	}
-	public void setBid(ArrayList<ArrayList<Double>> bid) {
-		this.bid = bid;
+	
+	public ArrayList<ArrayList<Double>> getAsks() {
+		return asks;
+	}
+	public void setAsk(ArrayList<ArrayList<Double>> asks) {
+		this.asks = asks;
+	}
+	
+	public ArrayList<ArrayList<Double>> getBids() {
+		return bids;
+	}
+	public void setBid(ArrayList<ArrayList<Double>> bids) {
+		this.bids = bids;
 	}
 }

@@ -1,20 +1,19 @@
 package objects;
 
 public class OrderResponse {
-	private boolean HasError;
-    private String Error;
+	private boolean hasError;
+    private String error;
+    
+    public OrderResponse(boolean hasError, String error) {
+    	this.hasError = hasError;
+    	this. error = error;
+    }
     
 	public boolean isHasError() {
-		return HasError;
-	}
-	public void setHasError(boolean hasError) {
-		HasError = hasError;
+		return hasError;
 	}
 	
 	public String getError() {
-		return Error;
-	}
-	public void setError(String error) {
-		Error = error;
+		return error;
 	}
 }
