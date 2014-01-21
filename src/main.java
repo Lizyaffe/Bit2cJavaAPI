@@ -16,9 +16,9 @@ import client.Bit2cClient;
 
 public class main {
 	public static void main(String[] args) {
-		String url = "https://www.bit2c.co.il/"; // local -  http://localhost:53825/
-        String key = "e0e86808-5616-4d34-a506-5884b2fe47c7";
-        String secret = "fead327fd3d40eca9ceec09d95cc464add75f22e434306fb7fa1b47de3c07149";
+		String url = "https://www.bit2c.co.il/";
+        String key = "<key>";
+        String secret = "<secret>";
         Bit2cClient client = new Bit2cClient(url, key, secret);
 
         ArrayList<ExchangesTrade> trades = client.GetTrades(PairType.LtcBtc, null, null);
