@@ -200,7 +200,7 @@ public class Bit2cClient {
     
     public String Query(String path, HashMap<String, String> args) {
         try {
-        	this.nonce = this.nonce != 0 ? nonce + 100 : System.currentTimeMillis()/1000;
+        	this.nonce = this.nonce != 0 ? nonce + 1 : System.currentTimeMillis()/1000;
             args.put("nonce", String.valueOf(nonce));
             String post_data = this.buildQueryString(args);
             Mac mac = Mac.getInstance("HmacSHA512");
