@@ -127,7 +127,7 @@ public class Bit2cClient {
     public AddOrderResponse AddOrder(OrderData data)
     {
     	HashMap<String, String> params = new HashMap<String, String>();
-    	params.put("Amout", String.valueOf(data.amount));
+    	params.put("Amount", String.valueOf(data.amount));
     	params.put("IsBid", String.valueOf(data.isBid));
     	params.put("Pair", String.valueOf(data.pair));
     	params.put("Price", String.valueOf(data.price));
